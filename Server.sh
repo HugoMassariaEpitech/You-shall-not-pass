@@ -22,5 +22,5 @@ echo "server {
     error_log  /var/log/nginx/data.error.log;
     root /var/www/YSNP;
 }" > /etc/nginx/domains/data.conf
-echo "include \"domains/*.conf\"" > /etc/nginx/nginx.conf
+echo "include \"domains/*.conf\"" >> /etc/nginx/nginx.conf
 service nginx reload
