@@ -103,6 +103,7 @@ touch /var/db/dhcpd.leases
 echo "dhcpd_flags=\"$INT_NIC\"" >> /etc/rc.conf.local
 
 rcctl enable dhcpd
+rcctl stop dhcpd
 rcctl start dhcpd
 
 echo "nameserver 127.0.0.1" > /etc/resolv.conf
