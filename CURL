@@ -11,8 +11,9 @@ FORWARD_DNS="8.8.8.8"
 
 echo "Updating the internal interface config!"
 echo "inet $INTERNAL_IP 255.255.255.0 NONE -inet6" > /etc/hostname.$INT_NIC
-echo "inet $EXTERNAL_IP 255.255.255.0 NONE -inet6" > /etc/hostname.$EXT_NIC
-echo $DEFAULT_GATEWAY > /etc/mygate
+echo "inet autoconf" > /etc/hostname.$EXT_NIC
+# echo "inet $EXTERNAL_IP 255.255.255.0 NONE -inet6" > /etc/hostname.$EXT_NIC
+# echo $DEFAULT_GATEWAY > /etc/mygate
 
 sh /etc/netstart
 
