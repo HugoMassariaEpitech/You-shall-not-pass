@@ -1,7 +1,7 @@
 INTERNAL_IP="192.168.42.64"
 EXTERNAL_IP="10.26.101.86"
 DEFAULT_GATEWAY="10.26.0.1"
-LAN_NET="192.168.42.64/24"
+INT_NET="192.168.42.64/24"
 LAN_SUBNET="192.168.42"
 DHCP_RANGE_START="70"
 DHCP_RANGE_END="110"
@@ -36,8 +36,8 @@ set skip on lo0 # Aucun filtre ne concerne lo0
 match in all scrub (no-df) # Normalisation des paquets
 block log all # Log de tous les paquets perdus
 block in quick from urpf-failed # Protection contre l'usurpation d'identité
-pass in on $INT_NIC from $LAN_NET #
-pass out on $INT_NIC to $LAN_NET #
+pass in on $INT_NIC from $INT_NET #
+pass out on $INT_NIC to $INT_NET #
 pass out on $EXT_NIC proto { tcp udp icmp } all modulate state #
 match out log on $EXT_NIC from $INT_NIC:network nat-to ($EXT_NIC:0)" > /etc/pf.conf #
 
