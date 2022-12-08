@@ -1,23 +1,14 @@
-INTERNAL_IP="192.168.42.64"
-EXTERNAL_IP="10.26.101.86"
-DEFAULT_GATEWAY="10.26.0.1"
-INT_NET="192.168.42.64/24"
-INT_SUBNET="192.168.42"
-DHCP_RANGE_START="70"
-DHCP_RANGE_END="110"
-INT_NIC="em1"
-EXT_NIC="em0"
-FORWARD_DNS="8.8.8.8"
+## Gateway
 
 # Configurer les interfaces réseaux
 
 echo "Configuration des interfaces réseaux"
 
-echo "inet $INTERNAL_IP 255.255.255.0 NONE" > /etc/hostname.$INT_NIC
-ifconfig $INT_NIC inet $INTERNAL_IP 255.255.255.0 NONE
+echo "inet 192.168.42.64 255.255.255.0 NONE" > /etc/hostname.em1
+ifconfig em1 inet 192.168.42.64 255.255.255.0
 
-echo "inet autoconf" > /etc/hostname.$EXT_NIC
-ifconfig $EXT_NIC inet autoconf
+echo "inet autoconf" > /etc/hostname.em0
+ifconfig em0 inet autoconf
 
 sh /etc/netstart
 
@@ -30,18 +21,8 @@ sysctl net.inet.ip.forwarding=1
 
 # Configuration de la redirection de traffic
 
-echo "ext_if=\"$EXT_NIC\"
-int_if = \"$INT_NIC\"
-int_net = \"$INT_NET\"
-set skip on lo0
-match in all scrub (no-df)
-block log all
-block in quick from urpf-failed
-pass in quick on \$ext_if inet proto tcp from any to any port = ssh keep state
-pass in on \$int_if from \$int_net
-pass out on \$int_if to \$int_net
-pass out on \$ext_if proto { tcp udp icmp } all modulate state
-match out log on \$ext_if from \$int_if:network nat-to (\$ext_if:0)" > /etc/pf.conf
+echo "pass out on em0 proto { tcp udp icmp } all modulate state
+match out log on em0 from em1:network nat-to (em0:0)" > /etc/pf.conf
 
 pfctl -f /etc/pf.conf
 
@@ -49,15 +30,19 @@ pfctl -f /etc/pf.conf
 
 echo "Configuration du DHCP"
 
-echo "option  domain-name-servers $INTERNAL_IP;
-subnet $INT_SUBNET.0 netmask 255.255.255.0 {
+echo "option  domain-name-servers 192.168.42.64;
+subnet 192.168.42.0 netmask 255.255.255.0 {
     option subnet-mask 255.255.255.0;
-    option broadcast-address $INT_SUBNET.255;
-    option routers $INTERNAL_IP;
-    range $INT_SUBNET.$DHCP_RANGE_START $INT_SUBNET.$DHCP_RANGE_END;
+    option broadcast-address 192.168.42.127;
+    option routers 192.168.42.64;
+    range 192.168.42.70 192.168.42.110;
+    host static-client {
+        hardware ethernet 22:33:44:55:66:77;
+		fixed-address 192.168.42.70;
+	}
 }" > /etc/dhcpd.conf
 
-echo "dhcpd_flags=$INT_NIC" >> /etc/rc.conf.local
+echo "dhcpd_flags=em1" >> /etc/rc.conf.local
 
 rcctl enable dhcpd
 rcctl stop dhcpd
