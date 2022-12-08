@@ -2,7 +2,7 @@ INTERNAL_IP="192.168.42.64"
 EXTERNAL_IP="10.26.101.86"
 DEFAULT_GATEWAY="10.26.0.1"
 INT_NET="192.168.42.64/24"
-LAN_SUBNET="192.168.42"
+INT_SUBNET="192.168.42"
 DHCP_RANGE_START="70"
 DHCP_RANGE_END="110"
 INT_NIC="em1"
@@ -48,11 +48,11 @@ pfctl -f /etc/pf.conf
 echo "Configuration du DHCP"
 
 echo "option  domain-name-servers $INTERNAL_IP;
-subnet $LAN_SUBNET.0 netmask 255.255.255.0 {
+subnet $INT_SUBNET.0 netmask 255.255.255.0 {
     option subnet-mask 255.255.255.0;
-    option broadcast-address $LAN_SUBNET.255;
+    option broadcast-address $INT_SUBNET.255;
     option routers $INTERNAL_IP;
-    range $LAN_SUBNET.$DHCP_RANGE_START $LAN_SUBNET.$DHCP_RANGE_END;
+    range $INT_SUBNET.$DHCP_RANGE_START $INT_SUBNET.$DHCP_RANGE_END;
 }" > /etc/dhcpd.conf
 
 echo "dhcpd_flags=$INT_NIC" >> /etc/rc.conf.local
