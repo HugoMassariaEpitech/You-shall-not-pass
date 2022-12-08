@@ -37,9 +37,9 @@ subnet 192.168.42.0 netmask 255.255.255.0 {
     option routers 192.168.42.64;
     range 192.168.42.70 192.168.42.110;
     host static-client {
-        hardware ethernet 22:33:44:55:66:77;
-		fixed-address 192.168.42.70;
-	}
+    	hardware ethernet 08:00:27:75:78:07;
+	fixed-address 192.168.42.70;
+    }
 }" > /etc/dhcpd.conf
 
 echo "dhcpd_flags=em1" >> /etc/rc.conf.local
