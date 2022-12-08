@@ -1,3 +1,5 @@
+## Server
+
 # Installation de nginx
 
 echo "Installation de nginx"
