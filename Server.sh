@@ -9,7 +9,7 @@ rm /usr/local/etc/nginx/nginx.conf
 
 pkg update
 pkg upgrade -y
-pkg install nginx php74 mysql80-server php74-mysql php74-mysqli mod_php74 -y
+pkg install nginx php74 mysql80-server php74-mysqli mod_php74 -y
 
 rehash
 
@@ -17,7 +17,7 @@ rehash
 
 echo "Initialisation de nginx"
 
-sed 's/.*nginx_enable=.*/nginx_enable="YES"/' > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
+sed 's/.*nginx_enable=.*/nginx_enable="YES"/' /etc/rc.conf > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
 rm /etc/rc.conf.temp
 service nginx stop
 service nginx start
@@ -36,18 +36,18 @@ service php-fpm restart
 
 echo "Initialisation de PHP"
 
-sed 's/.*php_fpm_enable=.*/php_fpm_enable="YES"/' > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
+sed 's/.*php_fpm_enable=.*/php_fpm_enable="YES"/' /etc/rc.conf > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
 rm /etc/rc.conf.temp
 sed 's/.*listen =.*/listen = /var/run/php74-fpm.sock;/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
-sed 's/.*;listen.owner = www.*/listen.owner = www/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+sed 's/.*;listen.owner = www.*/listen.owner = www/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
-sed 's/.*;listen.group = www.*/listen.group = www/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+sed 's/.*;listen.group = www.*/listen.group = www/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
-sed 's/.*;listen.mode = 0660.*/listen.mode = 0660/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+sed 's/.*;listen.mode = 0660.*/listen.mode = 0660/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
 cp /usr/local/etc/php.ini-production /usr/local/etc/php.ini
-sed 's/.*cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/' > /usr/local/etc/php.ini.temp && cat /usr/local/etc/php.ini.temp > /usr/local/etc/php.ini
+sed 's/.*cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/' /usr/local/etc/php.ini > /usr/local/etc/php.ini.temp && cat /usr/local/etc/php.ini.temp > /usr/local/etc/php.ini
 rm /usr/local/etc/php.ini.temp
 service php-fpm start
 service php-fpm status
@@ -56,7 +56,7 @@ service php-fpm status
 
 echo "Initialisation de Mysql"
 
-sed 's/.*mysql_enable=.*/mysql_enable="YES"/' > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
+sed 's/.*mysql_enable=.*/mysql_enable="YES"/' /etc/rc.conf > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
 rm /etc/rc.conf.temp
 service mysql-server start
 service mysql-server status
