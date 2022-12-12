@@ -29,6 +29,8 @@ curl https://gist.githubusercontent.com/hugomassaria/6996d95c1ef4db665123c260a08
 sed '$d' /usr/local/etc/nginx/nginx.conf > /usr/local/etc/nginx/nginx.conf.temp && cat /usr/local/etc/nginx/nginx.conf.temp > /usr/local/etc/nginx/nginx.conf
 rm /usr/local/etc/nginx/nginx.conf.temp
 echo 'include "domains/*.conf";}' >> /usr/local/etc/nginx/nginx.conf
+service nginx restart
+service php-fpm restart
 
 # Initialisation de PHP
 
@@ -68,8 +70,3 @@ mysql --user="root" --password="root" --execute="flush privileges;"
 
 curl https://gist.githubusercontent.com/hugomassaria/8c9e3991fb966a8d5c29a67fbf5a0fed/raw/08a9075246e54f85747154a5193f68414f3ff6b8/nsa501.sql > /root/nsa501.sql
 mysql -ubackend -pBit8Q6a6G nsa501 < /root/nsa501.sql
-
-# Restart services
-
-service nginx restart
-service php-fpm restart
