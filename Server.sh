@@ -7,20 +7,24 @@ echo "Installation de nginx et php"
 pkg delete -y nginx
 rm /usr/local/etc/nginx/nginx.conf
 
-pkg install nginx
-pkg install php72-fpm
+pkg update
+pkg upgrade -y
+pkg install nginx php74 mysql80-server php74-mysql php74-mysqli mod_php74 -y
+
+rehash
 
 # Initialisation de nginx
 
 echo "Initialisation de nginx"
 
-sysrc nginx_enable="YES"
+sed 's/.*nginx_enable=.*/nginx_enable="YES"/' > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
+rm /etc/rc.conf.temp
 service nginx stop
 service nginx start
 mkdir /var/www/YSNP
 curl https://gist.githubusercontent.com/hugomassaria/c2d5271af64ce3c01221bbad55043eb7/raw/9725bedd2b35ab9137876037937e45ecd1c511c2/data.php > /var/www/YSNP/data.php
 mkdir /usr/local/etc/nginx/domains/
-curl https://gist.githubusercontent.com/hugomassaria/6996d95c1ef4db665123c260a089f818/raw/102ff0f19c3f813918fea86543b2bf9efd5d6e7b/data.conf > /usr/local/etc/nginx/domains/data.conf
+curl https://gist.githubusercontent.com/hugomassaria/6996d95c1ef4db665123c260a089f818/raw/d95fc2f10e2e29f024a6c59020ace9b7f741416c/data.conf > /usr/local/etc/nginx/domains/data.conf
 
 sed '$d' /usr/local/etc/nginx/nginx.conf > /usr/local/etc/nginx/nginx.conf.temp && cat /usr/local/etc/nginx/nginx.conf.temp > /usr/local/etc/nginx/nginx.conf
 rm /usr/local/etc/nginx/nginx.conf.temp
@@ -30,7 +34,39 @@ echo 'include "domains/*.conf";}' >> /usr/local/etc/nginx/nginx.conf
 
 echo "Initialisation de PHP"
 
+sed 's/.*php_fpm_enable=.*/php_fpm_enable="YES"/' > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
+rm /etc/rc.conf.temp
+sed 's/.*listen =.*/listen = /var/run/php74-fpm.sock;/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+rm /usr/local/etc/php-fpm.d/www.conf.temp
+sed 's/.*;listen.owner = www.*/listen.owner = www/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+rm /usr/local/etc/php-fpm.d/www.conf.temp
+sed 's/.*;listen.group = www.*/listen.group = www/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+rm /usr/local/etc/php-fpm.d/www.conf.temp
+sed 's/.*;listen.mode = 0660.*/listen.mode = 0660/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+rm /usr/local/etc/php-fpm.d/www.conf.temp
+cp /usr/local/etc/php.ini-production /usr/local/etc/php.ini
+sed 's/.*cgi.fix_pathinfo=.*/cgi.fix_pathinfo=0/' > /usr/local/etc/php.ini.temp && cat /usr/local/etc/php.ini.temp > /usr/local/etc/php.ini
+rm /usr/local/etc/php.ini.temp
+service php-fpm start
+service php-fpm status
+
+# Initialisation de Mysql
+
+echo "Initialisation de Mysql"
+
+sed 's/.*mysql_enable=.*/mysql_enable="YES"/' > /etc/rc.conf.temp && cat /etc/rc.conf.temp > /etc/rc.conf
+rm /etc/rc.conf.temp
+service mysql-server start
+service mysql-server status
+mysql_secure_installation
+service mysql-server restart
+service mysql-server status
+mysql --user="root" --password="root" --execute="CREATE USER 'backend'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Bit8Q6a6G';"
+mysql --user="root" --password="root" --execute="CREATE DATABASE nsa501;"
+mysql --user="root" --password="root" --execute="GRANT ALL ON nsa501.* to 'backend'@'localhost';"
+mysql --user="root" --password="root" --execute="flush privileges;"
+
 # Restart services
 
 service nginx restart
-service php72-fpm restart
+service php-fpm restart
