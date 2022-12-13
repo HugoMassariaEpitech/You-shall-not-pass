@@ -13,7 +13,7 @@ pkg install -y nginx php74 mysql80-server php74-mysqli mod_php74
 echo "Initialisation de nginx"
 
 echo 'nginx_enable="YES"' >> /etc/rc.conf
-mkdir /var/www/YSNP
+mkdir -p /var/www/YSNP
 curl https://gist.githubusercontent.com/hugomassaria/c2d5271af64ce3c01221bbad55043eb7/raw/9725bedd2b35ab9137876037937e45ecd1c511c2/data.php > /var/www/YSNP/data.php
 mkdir /usr/local/etc/nginx/domains/
 curl https://gist.githubusercontent.com/hugomassaria/6996d95c1ef4db665123c260a089f818/raw/8c14cdc11ab43b2c2221b61030aa4d02cc33daa1/data.conf > /usr/local/etc/nginx/domains/data.conf
