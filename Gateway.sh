@@ -70,4 +70,5 @@ echo "dhcpd_flags=em1 em2 em3" > /etc/rc.conf.local
 
 rcctl enable dhcpd
 rcctl stop dhcpd
+sh /etc/netstart
 rcctl start dhcpd
