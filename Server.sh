@@ -8,6 +8,26 @@ pkg update
 pkg upgrade -y
 pkg install -y nginx php74 mysql80-server php74-mysqli mod_php74
 
+rehash
+
+# Initialisation de Mysql
+
+echo "Initialisation de Mysql"
+
+echo 'mysql_enable="YES"' >> /etc/rc.conf
+
+service mysql-server start
+mysql_secure_installation
+service mysql-server restart
+
+mysql --user="root" --password="Azerty1234!" --execute="CREATE USER 'backend'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Bit8Q6a6G';"
+mysql --user="root" --password="Azerty1234!" --execute="CREATE DATABASE nsa501;"
+mysql --user="root" --password="Azerty1234!" --execute="GRANT ALL ON nsa501.* to 'backend'@'localhost';"
+mysql --user="root" --password="Azerty1234!" --execute="flush privileges;"
+
+curl https://gist.githubusercontent.com/hugomassaria/8c9e3991fb966a8d5c29a67fbf5a0fed/raw/08a9075246e54f85747154a5193f68414f3ff6b8/nsa501.sql > /root/nsa501.sql
+mysql -ubackend -pBit8Q6a6G nsa501 < /root/nsa501.sql
+
 # Initialisation de nginx
 
 echo "Initialisation de nginx"
@@ -27,7 +47,7 @@ service nginx restart
 echo "Initialisation de PHP"
 
 echo 'php_fpm_enable="YES"' >> /etc/rc.conf
-sed '40s/.*/listen = /var/run/php74-fpm.sock;/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+sed '40s/.*/listen = \/var\/run\/php74-fpm.sock;/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
 sed 's/.*;listen.owner = www.*/listen.owner = www/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
@@ -42,22 +62,3 @@ rm /usr/local/etc/php.ini.temp
 
 service php-fpm start
 service php-fpm restart
-
-# Initialisation de Mysql
-
-echo "Initialisation de Mysql"
-
-echo 'mysql_enable="YES"' >> /etc/rc.conf
-
-service mysql-server start
-service mysql-server restart
-
-mysql_secure_installation
-
-mysql --user="root" --password="Azerty1234!" --execute="CREATE USER 'backend'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Bit8Q6a6G';"
-mysql --user="root" --password="Azerty1234!" --execute="CREATE DATABASE nsa501;"
-mysql --user="root" --password="Azerty1234!" --execute="GRANT ALL ON nsa501.* to 'backend'@'localhost';"
-mysql --user="root" --password="Azerty1234!" --execute="flush privileges;"
-
-curl https://gist.githubusercontent.com/hugomassaria/8c9e3991fb966a8d5c29a67fbf5a0fed/raw/08a9075246e54f85747154a5193f68414f3ff6b8/nsa501.sql > /root/nsa501.sql
-mysql -ubackend -pBit8Q6a6G nsa501 < /root/nsa501.sql
