@@ -7,14 +7,14 @@ echo "Configuration des interfaces réseaux"
 echo "inet autoconf" > /etc/hostname.em0
 ifconfig em0 inet autoconf
 
-echo "inet 192.168.42.64 255.255.255.0 NONE" > /etc/hostname.em1
-ifconfig em1 inet 192.168.42.64 255.255.255.0
+echo "inet 192.168.42.64 192.168.42.127 NONE" > /etc/hostname.em1
+ifconfig em1 inet 192.168.42.65 192.168.42.127
 
-echo "inet 192.168.42.0 255.255.255.0 NONE" > /etc/hostname.em2
-ifconfig em2 inet 192.168.42.0 255.255.255.0
+echo "inet 192.168.42.0 192.168.42.63 NONE" > /etc/hostname.em2
+ifconfig em2 inet 192.168.42.1 192.168.42.63
 
-echo "inet 192.168.42.128 255.255.255.0 NONE" > /etc/hostname.em3
-ifconfig em3 inet 192.168.42.128 255.255.255.0
+echo "inet 192.168.42.128 192.168.42.191 NONE" > /etc/hostname.em3
+ifconfig em3 inet 192.168.42.129 192.168.42.191
 
 sh /etc/netstart
 
