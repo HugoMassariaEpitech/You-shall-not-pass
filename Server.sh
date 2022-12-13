@@ -58,7 +58,6 @@ mysql -ubackend -pBit8Q6a6G nsa501 < /root/nsa501.sql
 echo "Restart all services"
 
 service nginx start
-service nginx stop
 service nginx restart
 service nginx status
 
