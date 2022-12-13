@@ -38,11 +38,11 @@ pfctl -f /etc/pf.conf
 
 echo "Configuration du DHCP"
 
-echo "option  domain-name-servers 8.8.8.8;
-subnet 192.168.42.64 netmask 255.255.255.0 {
+echo "subnet 192.168.42.64 netmask 255.255.255.0 {
     option subnet-mask 255.255.255.0;
     option broadcast-address 192.168.42.127;
-    option routers 192.168.42.64;
+    option routers 192.168.42.65;
+    option  domain-name-servers 8.8.8.8;
     range 192.168.42.70 192.168.42.110;
     host static-client {
     	hardware ethernet 08:00:27:75:78:07;
@@ -53,18 +53,20 @@ subnet 192.168.42.64 netmask 255.255.255.0 {
 subnet 192.168.42.0 netmask 255.255.255.0 {
     option subnet-mask 255.255.255.0;
     option broadcast-address 192.168.42.63;
-    option routers 192.168.42.0;
+    option routers 192.168.42.1;
+    option  domain-name-servers 8.8.8.8;
     range 192.168.42.40 192.168.42.60;
 }
 
 subnet 192.168.42.128 netmask 255.255.255.0 {
     option subnet-mask 255.255.255.0;
     option broadcast-address 192.168.42.191;
-    option routers 192.168.42.128;
+    option routers 192.168.42.129;
+    option  domain-name-servers 8.8.8.8;
     range 192.168.42.140 192.168.42.180;
 }" > /etc/dhcpd.conf
 
-echo "dhcpd_flags=em1 em2 em3" >> /etc/rc.conf.local
+echo "dhcpd_flags=em1 em2 em3" > /etc/rc.conf.local
 
 rcctl enable dhcpd
 rcctl stop dhcpd
