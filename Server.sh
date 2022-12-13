@@ -24,7 +24,7 @@ curl https://gist.githubusercontent.com/hugomassaria/6996d95c1ef4db665123c260a08
 echo "Initialisation de PHP"
 
 echo 'php_fpm_enable="YES"' >> /etc/rc.conf
-sed 's/.*listen = 127.0.0.1:9000.*/listen = /var/run/php74-fpm.sock;/' > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
+sed -i '40s/.*/listen = /var/run/php74-fpm.sock;/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
 sed 's/.*;listen.owner = www.*/listen.owner = www/' /usr/local/etc/php-fpm.d/www.conf > /usr/local/etc/php-fpm.d/www.conf.temp && cat /usr/local/etc/php-fpm.d/www.conf.temp > /usr/local/etc/php-fpm.d/www.conf
 rm /usr/local/etc/php-fpm.d/www.conf.temp
@@ -42,7 +42,10 @@ rm /usr/local/etc/php.ini.temp
 echo "Initialisation de Mysql"
 
 echo 'mysql_enable="YES"' >> /etc/rc.conf
+
+service mysql-server start
 mysql_secure_installation
+
 mysql --user="root" --password="Azerty1234!" --execute="CREATE USER 'backend'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Bit8Q6a6G';"
 mysql --user="root" --password="Azerty1234!" --execute="CREATE DATABASE nsa501;"
 mysql --user="root" --password="Azerty1234!" --execute="GRANT ALL ON nsa501.* to 'backend'@'localhost';"
@@ -58,7 +61,6 @@ echo "Restart all services"
 service nginx start
 service nginx restart
 
-service mysql-server start
 service mysql-server restart
 
 service php-fpm start
