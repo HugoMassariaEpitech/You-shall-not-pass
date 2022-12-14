@@ -24,8 +24,7 @@ sysctl net.inet.ip.forwarding=1
 
 # Configuration de la redirection de traffic
 
-echo "pass out on em0 proto { tcp udp icmp } all modulate state
-match out log on em0 from any nat-to (em0:0)" > /etc/pf.conf
+echo "pass in on { em1 em2 } inet" > /etc/pf.conf
 
 pfctl -f /etc/pf.conf
 
