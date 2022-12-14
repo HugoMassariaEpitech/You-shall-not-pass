@@ -7,6 +7,9 @@ echo "Configuration des interfaces réseaux"
 echo "inet 192.168.42.64 255.255.255.0 NONE" > /etc/hostname.em1
 ifconfig em1 inet 192.168.42.64 255.255.255.0
 
+echo "inet 192.168.42.0 255.255.255.0 NONE" > /etc/hostname.em2
+ifconfig em2 inet 192.168.42.0 255.255.255.0
+
 echo "inet autoconf" > /etc/hostname.em0
 ifconfig em0 inet autoconf
 
@@ -40,6 +43,13 @@ subnet 192.168.42.64 netmask 255.255.255.0 {
     	hardware ethernet 08:00:27:75:78:07;
 	fixed-address 192.168.42.70;
     }
+}
+
+subnet 192.168.42.0 netmask 255.255.255.0 {
+    option subnet-mask 255.255.255.0;
+    option broadcast-address 192.168.42.63;
+    option routers 192.168.42.0;
+    range 192.168.42.40 192.168.42.60;
 }" > /etc/dhcpd.conf
 
 echo "dhcpd_flags=em1" >> /etc/rc.conf.local
