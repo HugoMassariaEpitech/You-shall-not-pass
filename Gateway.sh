@@ -30,15 +30,15 @@ pfctl -f /etc/pf.conf
 
 echo "Configuration du DHCP"
 
-echo "option  domain-name-servers 8.8.8.8;
-subnet 192.168.42.64 netmask 255.255.255.0 {
+echo "option  domain-name-servers 192.168.42.64;
+subnet 192.168.42.0 netmask 255.255.255.0 {
     option subnet-mask 255.255.255.0;
     option broadcast-address 192.168.42.127;
-    option routers 192.168.42.65;
+    option routers 192.168.42.64;
     range 192.168.42.70 192.168.42.110;
     host static-client {
-    	hardware ethernet 08:00:27:ED:A7:9E;
-	fixed-address 192.168.42.84;
+    	hardware ethernet 08:00:27:75:78:07;
+	fixed-address 192.168.42.70;
     }
 }" > /etc/dhcpd.conf
 
