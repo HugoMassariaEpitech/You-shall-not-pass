@@ -19,8 +19,58 @@ sysctl net.inet.ip.forwarding=1
 
 # Configuration de la redirection de traffic
 
-echo "pass in on { em1 em2 } inet
-match out on em0 inet from any nat-to (em0:0)" > /etc/pf.conf
+echo "administration = "em1"
+server = "em2"
+employee = "em3"
+
+
+
+table <martians> { 0.0.0.0/8 192.168.42.0/26 192.168.42.64/26 192.168.42.128/26 }
+set block-policy drop
+set loginterface egress
+set skip on lo
+match in all scrub (no-df random-id max-mss 1440)
+match out on egress inet from !(egress:network) to any nat-to (egress:0)
+
+
+
+antispoof quick for { egress $administration }
+antispoof quick for { egress $server }
+antispoof quick for { egress $employee }
+
+
+
+block in quick on egress from <martians> to any
+block return out quick on egress from any to <martians>
+
+
+
+block all
+
+
+
+pass out quick inet keep state
+
+
+
+#Administration reach all server into the network server on all ports
+pass in on { $administration } all
+pass out on { $administration } all
+
+
+
+#Employee Administration and Server go out internet, ping devices on another subnet
+pass in on { $administration } inet
+pass in on { $server } inet
+pass in on { $employee } inet
+
+
+
+#Employee reach only http and https protocol and block ssh
+pass in on { $employee } proto tcp to port {80 443}
+pass out on { $employee } proto { tcp udp } to port {80 443}
+block in on { $employee } proto tcp to port 22
+block out on { $employee } proto tcp to port 22" > /etc/pf.conf
 
 pfctl -f /etc/pf.conf
 
