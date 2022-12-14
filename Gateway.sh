@@ -19,7 +19,8 @@ sysctl net.inet.ip.forwarding=1
 
 # Configuration de la redirection de traffic
 
-echo "pass in on { em1 em2 } inet" > /etc/pf.conf
+echo "pass in on { em1 em2 } inet
+match out on em0 inet from any nat-to (em0:0)" > /etc/pf.conf
 
 pfctl -f /etc/pf.conf
 
