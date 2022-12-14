@@ -22,7 +22,7 @@ sysctl net.inet.ip.forwarding=1
 # Configuration de la redirection de traffic
 
 echo "pass out on em0 proto { tcp udp icmp } all modulate state
-match out log on em0 from em1:network nat-to (em0:0)" > /etc/pf.conf
+match out log on em0 from any nat-to (em0:0)" > /etc/pf.conf
 
 pfctl -f /etc/pf.conf
 
@@ -30,8 +30,8 @@ pfctl -f /etc/pf.conf
 
 echo "Configuration du DHCP"
 
-echo "option  domain-name-servers 192.168.42.64;
-subnet 192.168.42.0 netmask 255.255.255.0 {
+echo "option  domain-name-servers 8.8.8.8;
+subnet 192.168.42.64 netmask 255.255.255.0 {
     option subnet-mask 255.255.255.0;
     option broadcast-address 192.168.42.127;
     option routers 192.168.42.64;
