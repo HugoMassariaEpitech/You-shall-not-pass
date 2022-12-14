@@ -52,7 +52,7 @@ subnet 192.168.42.0 netmask 255.255.255.0 {
     range 192.168.42.40 192.168.42.60;
 }" > /etc/dhcpd.conf
 
-echo "dhcpd_flags=em1" >> /etc/rc.conf.local
+echo "dhcpd_flags=em1 em2" >> /etc/rc.conf.local
 
 rcctl enable dhcpd
 rcctl stop dhcpd
