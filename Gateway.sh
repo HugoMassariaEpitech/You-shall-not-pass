@@ -4,11 +4,11 @@
 
 echo "Configuration des interfaces réseaux"
 
-echo "inet 192.168.42.64 255.255.255.0 NONE" > /etc/hostname.em1
-ifconfig em1 inet 192.168.42.64 255.255.255.0
+echo "inet 192.168.42.65 255.255.255.0 NONE" > /etc/hostname.em1
+ifconfig em1 inet 192.168.42.65 255.255.255.0
 
-echo "inet 192.168.42.128 255.255.255.0 NONE" > /etc/hostname.em2
-ifconfig em2 inet 192.168.42.128 255.255.255.0
+echo "inet 192.168.42.129 255.255.255.0 NONE" > /etc/hostname.em2
+ifconfig em2 inet 192.168.42.129 255.255.255.0
 
 echo "inet autoconf" > /etc/hostname.em0
 ifconfig em0 inet autoconf
