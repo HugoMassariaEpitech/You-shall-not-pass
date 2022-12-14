@@ -19,7 +19,7 @@ sysctl net.inet.ip.forwarding=1
 
 # Configuration de la redirection de traffic
 
-echo "administration = "em1"
+echo 'administration = "em1"
 server = "em2"
 employee = "em3"
 
@@ -70,7 +70,7 @@ pass in on { $employee } inet
 pass in on { $employee } proto tcp to port {80 443}
 pass out on { $employee } proto { tcp udp } to port {80 443}
 block in on { $employee } proto tcp to port 22
-block out on { $employee } proto tcp to port 22" > /etc/pf.conf
+block out on { $employee } proto tcp to port 22' > /etc/pf.conf
 
 pfctl -f /etc/pf.conf
 
