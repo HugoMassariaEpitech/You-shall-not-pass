@@ -16,8 +16,7 @@ sh /etc/netstart
 echo "Activation du transfert d'IP"
 
 echo "net.inet.ip.forwarding=1" > /etc/sysctl.conf
-
-sysctl -p /etc/sysctl.conf
+sysctl net.inet.ip.forwarding=1
 
 # Configuration de la redirection de traffic
 
