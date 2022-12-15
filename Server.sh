@@ -28,6 +28,8 @@ mysql --user="root" --password="Azerty1234!" --execute="flush privileges;"
 curl https://gist.githubusercontent.com/hugomassaria/8c9e3991fb966a8d5c29a67fbf5a0fed/raw/08a9075246e54f85747154a5193f68414f3ff6b8/nsa501.sql > /root/nsa501.sql
 mysql -ubackend -pBit8Q6a6G nsa501 < /root/nsa501.sql
 
+rm /root/nsa501.sql
+
 # Initialisation de nginx
 
 echo "Initialisation de nginx"
