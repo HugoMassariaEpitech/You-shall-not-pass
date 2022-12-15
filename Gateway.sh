@@ -42,7 +42,7 @@ subnet 192.168.42.64 netmask 255.255.255.192 {
     option domain-name-servers 8.8.8.8;
     range 192.168.42.70 192.168.42.110;
     host server {
-        hardware ethernet 08:00:27:F9:79:CB;
+        hardware ethernet 08:00:27:B4:6D:C8;
         fixed-address 192.168.42.70;
     }
 }
