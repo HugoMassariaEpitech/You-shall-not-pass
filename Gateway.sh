@@ -22,7 +22,11 @@ sysctl net.inet.ip.forwarding=1
 
 echo "Configuration de la redirection de traffic"
 
-echo "match out on em0 nat-to em0
+echo "block all
+pass in on any proto { tcp udp } to port { 53 80 443 }
+pass in inet proto icmp icmp-type { echoreq }
+pass in on em1 proto tcp to em2:network
+match out on em0 nat-to em0
 pass out quick inet keep state" > /etc/pf.conf
 
 pfctl -f /etc/pf.conf
