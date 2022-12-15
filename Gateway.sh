@@ -4,9 +4,10 @@
 
 echo "Configuration des interfaces réseaux"
 
-echo "dhcp" > /etc/hostname.em0
-echo "inet 192.168.42.65 255.255.255.192 192.168.42.127" > /etc/hostname.em1
-echo "inet 192.168.42.129 255.255.255.192 192.168.42.191" > /etc/hostname.em2
+echo "dhcp" > /etc/hostname.em0 # Bridge
+echo "inet 192.168.42.1 255.255.255.192 192.168.42.191" > /etc/hostname.em1 # Administration
+echo "inet 192.168.42.65 255.255.255.192 192.168.42.127" > /etc/hostname.em2 # Server
+echo "inet 192.168.42.129 255.255.255.192 192.168.42.191" > /etc/hostname.em3 # Employee
 
 sh /etc/netstart
 
@@ -15,9 +16,12 @@ sh /etc/netstart
 echo "Activation du transfert d'IP"
 
 echo "net.inet.ip.forwarding=1" > /etc/sysctl.conf
-sysctl net.inet.ip.forwarding=1
+
+sysctl -p /etc/sysctl.conf
 
 # Configuration de la redirection de traffic
+
+echo "Configuration de la redirection de traffic"
 
 echo "match out on em0 nat-to em0
 pass out quick inet keep state" > /etc/pf.conf
@@ -28,16 +32,15 @@ pfctl -f /etc/pf.conf
 
 echo "Configuration du DHCP"
 
-echo "option  domain-name-servers 8.8.8.8;
-subnet 192.168.42.0 netmask 255.255.255.192 {
+echo "subnet 192.168.42.0 netmask 255.255.255.192 {
     option routers 192.168.42.1;
-    option domain-name-servers 192.168.42.1, 8.8.8.8;
+    option domain-name-servers 8.8.8.8;
     range 192.168.42.40 192.168.42.60;
 }
 
 subnet 192.168.42.64 netmask 255.255.255.192 {
     option routers 192.168.42.65;
-    option domain-name-servers 192.168.42.65, 8.8.8.8;
+    option domain-name-servers 8.8.8.8;
     range 192.168.42.70 192.168.42.110;
     host server {
         hardware ethernet 08:00:27:F9:79:CB;
@@ -47,7 +50,7 @@ subnet 192.168.42.64 netmask 255.255.255.192 {
 
 subnet 192.168.42.128 netmask 255.255.255.192 {
     option routers 192.168.42.129;
-    option domain-name-servers 192.168.42.128, 8.8.8.8;
+    option domain-name-servers 8.8.8.8;
     range 192.168.42.140 192.168.42.180;
 }" > /etc/dhcpd.conf
 
